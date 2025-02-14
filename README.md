@@ -1,75 +1,46 @@
 # Todo App with Next.js and React Query
 
-This is a simple Todo application built with **Next.js**, **React Query**, and **Tailwind CSS**. The app allows users to add, edit, and delete tasks. The data is managed locally using a mock API, but the structure is designed to easily integrate with a real backend.
+A modern Todo application built with **Next.js** and **React Query**, integrated with the [JSONPlaceholder](https://jsonplaceholder.typicode.com) API. Features real-time CRUD operations with optimistic updates.
+
+[Live Demo](https://todo-app-next-two-omega.vercel.app/) | [GitHub Repository](https://github.com/schyrva/todo-app-next)
 
 ## Features
 
-- **Add Tasks**: Users can add new tasks with a title.
-- **Edit Tasks**: Users can edit existing tasks.
-- **Delete Tasks**: Users can delete tasks.
-- **Optimistic Updates**: The app uses optimistic updates for a smooth user experience.
-- **Responsive Design**: The app is fully responsive and works on all screen sizes.
+- Create, edit, and delete todos
+- Optimistic UI updates
+- Responsive design
+- Error handling and loading states
+- Type-safe implementation
 
-## Demo
+## Tech Stack
 
-You can check out the live demo of the app [here](https://todo-app-next-two-omega.vercel.app/).
-
-## GitHub Repository
-
-The source code for this project is available on [GitHub](https://github.com/schyrva/todo-app-next).
-
----
+- **Next.js**
+- **React Query**
+- **Tailwind CSS**
+- **TypeScript**
+- **JSONPlaceholder**
 
 ## Getting Started
 
-To run this project locally, follow these steps:
+1. Clone repo:  
+`git clone https://github.com/schyrva/todo-app-next.git`
+2. Install dependencies:  
+`npm install`
+3. Start dev server:  
+`npm run dev`
 
-### Prerequisites
+Visit `http://localhost:3000`
 
-- Node.js (v14 or higher)
-- npm or yarn
+## API Integration
 
-### Installation
+Uses [JSONPlaceholder](https://jsonplaceholder.typicode.com) endpoints:
+- `GET /todos?_limit=10`
+- `POST /todos`
+- `PUT /todos/{id}`
+- `DELETE /todos/{id}`
 
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/schyrva/todo-app-next.git
-   ```
-
-2. **Install dependencies:**
-
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-
-3. **Run the development server:**
-
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-4. **Open your browser and visit:**
-
-   ```bash
-   http://localhost:3000
-   ```
-
-## Technologies Used
-
-- **Next.js**: A React framework for server-side rendering and static site generation.
-- **React Query**: A library for managing server state and caching.
-- **Tailwind CSS**: A utility-first CSS framework for styling.
-- **TypeScript**: A typed superset of JavaScript for better developer experience.
-
-## Contributing
-
-Contributions are welcome! If you have any suggestions, bug reports, or feature requests, please open an issue or submit a pull request.
+*Note: Changes are mocked (not persisted) per API behavior.*
 
 ## License
 
-This project is open-source and available under the MIT License.
+MIT © [Stanislav Chyrva]. Contributions welcome.
