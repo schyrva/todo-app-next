@@ -9,7 +9,7 @@ const Task = ({ task }: { task: ITask }) => {
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [taskTitle, setTaskTitle] = useState(task.title);
-  
+
   const { mutate: editTodo } = useEditTodo();
   const { mutate: deleteTodo } = useDeleteTodo();
 
@@ -20,7 +20,7 @@ const Task = ({ task }: { task: ITask }) => {
   };
 
   return (
-    <tr key={task.id}>
+    <tr key={task.id} className="hover:bg-gray-100 transition-colors">
       <td className="w-full">{task.title}</td>
       <td className="flex gap-5">
         <FiEdit
@@ -28,7 +28,7 @@ const Task = ({ task }: { task: ITask }) => {
             setTaskTitle(task.title);
             setOpenModalEdit(true);
           }}
-          className="cursor-pointer text-blue-500"
+          className="cursor-pointer text-blue-500 hover:text-blue-700 transition-colors"
           size={18}
           aria-label="Edit task"
         />
@@ -57,7 +57,7 @@ const Task = ({ task }: { task: ITask }) => {
 
         <FiTrash2
           onClick={() => setOpenModalDelete(true)}
-          className="cursor-pointer text-red-500"
+          className="cursor-pointer text-red-500 hover:text-red-700 transition-colors"
           size={18}
           aria-label="Delete task"
         />
