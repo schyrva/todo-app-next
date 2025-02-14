@@ -59,16 +59,6 @@ To run this project locally, follow these steps:
    http://localhost:3000
    ```
 
-## Project Structure
-
-- **app/**: Contains the main application pages and components.
-- **components/**: Reusable components like AddTask, Task, and TodoList.
-- **api/**: Mock API functions for managing todos.
-- **types/**: TypeScript interfaces for the todo items.
-- **public/**: Static assets like images.
-- **styles/**: Global styles and Tailwind configuration.
-- **providers/**: React Query provider for managing server state.
-
 ## Technologies Used
 
 - **Next.js**: A React framework for server-side rendering and static site generation.
