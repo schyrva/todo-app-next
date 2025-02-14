@@ -12,13 +12,13 @@ const AddTask = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTaskValue) return;
-    
+
     addTodo({
       title: newTaskValue,
       completed: false,
       userId: 1,
     });
-    
+
     setNewTaskValue("");
     setModalOpen(false);
   };
@@ -33,8 +33,8 @@ const AddTask = () => {
         Add new task <HiOutlinePlus className="ml-2" size={16} />
       </button>
 
-      <Modal 
-        modalOpen={modalOpen} 
+      <Modal
+        modalOpen={modalOpen}
         setModalOpen={setModalOpen}
         title="Add new task"
       >

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import Modal from "./Modal";
-import type { ITask } from "@/types/tasks";
+import { ITask } from "@/types/tasks";
 import { useEditTodo, useDeleteTodo } from "@/hooks/useTodos";
 
 const Task = ({ task }: { task: ITask }) => {

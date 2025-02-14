@@ -1,30 +1,45 @@
-import type { ITask } from "./types/tasks";
+export interface ITask {
+  id: number;
+  title: string;
+  completed: boolean;
+  userId: number;
+}
 
-const LOCAL_STORAGE_KEY = 'todos';
+const API_URL = 'https://jsonplaceholder.typicode.com/todos';
 
 export const getAllTodos = async (): Promise<ITask[]> => {
-  const localData = localStorage.getItem(LOCAL_STORAGE_KEY);
-  return localData ? JSON.parse(localData) : [];
+  const response = await fetch(`${API_URL}?_limit=10`);
+  if (!response.ok) throw new Error('Failed to fetch todos');
+  return response.json();
 };
 
-export const addTodo = async (todo: Omit<ITask, "id">): Promise<ITask> => {
-  const todos = await getAllTodos();
-  const newTodo = { ...todo, id: Date.now() };
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([newTodo, ...todos]));
-  return newTodo;
+export const addTodo = async (todo: Omit<ITask, 'id'>): Promise<ITask> => {
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    body: JSON.stringify(todo),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  });
+  if (!response.ok) throw new Error('Failed to add todo');
+  return response.json();
 };
 
-export const editTodo = async (updatedTodo: ITask): Promise<ITask> => {
-  const todos = await getAllTodos();
-  const updatedTodos = todos.map(todo => 
-    todo.id === updatedTodo.id ? updatedTodo : todo
-  );
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
-  return updatedTodo;
+export const editTodo = async (todo: ITask): Promise<ITask> => {
+  const response = await fetch(`${API_URL}/${todo.id}`, {
+    method: 'PUT',
+    body: JSON.stringify(todo),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  });
+  if (!response.ok) throw new Error('Failed to update todo');
+  return response.json();
 };
 
 export const deleteTodo = async (id: number): Promise<void> => {
-  const todos = await getAllTodos();
-  const filteredTodos = todos.filter(todo => todo.id !== id);
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filteredTodos));
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) throw new Error('Failed to delete todo');
 };
