@@ -1,63 +1,21 @@
 "use client";
-import { ITask } from "@/types/tasks";
 import { useState } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import Modal from "./Modal";
-import { deleteTodo, editTodo } from "@/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { ITask } from "@/types/tasks";
+import { useEditTodo, useDeleteTodo } from "@/hooks/useTodos";
 
 const Task = ({ task }: { task: ITask }) => {
-  const queryClient = useQueryClient();
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
-  const [taskToEdit, setTaskToEdit] = useState(task.title);
-
-  const editMutation = useMutation({
-    mutationFn: editTodo,
-    onMutate: async (updatedTodo) => {
-      await queryClient.cancelQueries({ queryKey: ["todos"] });
-      const previousTodos = queryClient.getQueryData<ITask[]>(["todos"]);
-      
-      queryClient.setQueryData<ITask[]>(["todos"], (old) =>
-        old?.map((todo) => todo.id === updatedTodo.id ? updatedTodo : todo)
-      );
-      
-      return { previousTodos };
-    },
-    onError: (err, updatedTodo, context) => {
-      queryClient.setQueryData(["todos"], context?.previousTodos);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteTodo,
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: ["todos"] });
-      const previousTodos = queryClient.getQueryData<ITask[]>(["todos"]);
-      
-      queryClient.setQueryData<ITask[]>(["todos"], (old) =>
-        old?.filter((todo) => todo.id !== id)
-      );
-      
-      return { previousTodos };
-    },
-    onError: (err, id, context) => {
-      queryClient.setQueryData(["todos"], context?.previousTodos);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-    },
-  });
+  const [taskTitle, setTaskTitle] = useState(task.title);
+  
+  const { mutate: editTodo } = useEditTodo();
+  const { mutate: deleteTodo } = useDeleteTodo();
 
   const handleEdit = (e: React.FormEvent) => {
     e.preventDefault();
-    editMutation.mutate({
-      ...task,
-      title: taskToEdit,
-    });
+    editTodo({ ...task, title: taskTitle });
     setOpenModalEdit(false);
   };
 
@@ -66,24 +24,32 @@ const Task = ({ task }: { task: ITask }) => {
       <td className="w-full">{task.title}</td>
       <td className="flex gap-5">
         <FiEdit
-          onClick={() => setOpenModalEdit(true)}
+          onClick={() => {
+            setTaskTitle(task.title);
+            setOpenModalEdit(true);
+          }}
           className="cursor-pointer text-blue-500"
           size={18}
+          aria-label="Edit task"
         />
-        <Modal modalOpen={openModalEdit} setModalOpen={setOpenModalEdit}>
+
+        <Modal
+          modalOpen={openModalEdit}
+          setModalOpen={setOpenModalEdit}
+          title="Edit task"
+        >
           <form onSubmit={handleEdit}>
-            <h3 className="font-bold text-lg">Edit task</h3>
             <div className="modal-action">
               <input
-                value={taskToEdit}
-                onChange={(e) => setTaskToEdit(e.target.value)}
+                value={taskTitle}
+                onChange={(e) => setTaskTitle(e.target.value)}
                 type="text"
-                placeholder="Type here"
                 className="input input-bordered w-full"
                 required
+                autoFocus
               />
               <button type="submit" className="btn btn-primary">
-                Submit
+                Save
               </button>
             </div>
           </form>
@@ -93,23 +59,30 @@ const Task = ({ task }: { task: ITask }) => {
           onClick={() => setOpenModalDelete(true)}
           className="cursor-pointer text-red-500"
           size={18}
+          aria-label="Delete task"
         />
-        <Modal modalOpen={openModalDelete} setModalOpen={setOpenModalDelete}>
-          <h3 className="font-bold text-lg">Delete Task</h3>
-          <p className="py-4">Are you sure you want to delete this task?</p>
-          <div className="modal-action">
-            <button
-              className="btn btn-ghost"
-              onClick={() => setOpenModalDelete(false)}
-            >
-              Cancel
-            </button>
-            <button
-              className="btn btn-error"
-              onClick={() => deleteMutation.mutate(task.id)}
-            >
-              Delete
-            </button>
+
+        <Modal
+          modalOpen={openModalDelete}
+          setModalOpen={setOpenModalDelete}
+          title="Delete Task"
+        >
+          <div className="flex flex-col gap-4">
+            <p>Are you sure you want to delete this task?</p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="btn btn-ghost"
+                onClick={() => setOpenModalDelete(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-error"
+                onClick={() => deleteTodo(task.id)}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </Modal>
       </td>

@@ -4,6 +4,7 @@ import { getAllTodos } from "@/api";
 import AddTask from "./components/AddTask";
 import TodoList from "./components/TodoList";
 
+
 export default function Home() {
   const { data: tasks = [], isLoading, isError } = useQuery({
     queryKey: ["todos"],
