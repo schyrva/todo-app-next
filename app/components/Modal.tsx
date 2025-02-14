@@ -22,7 +22,6 @@ const Modal: React.FC<ModalProps> = ({
         >
           ✕
         </label>
-        {/* Add title display here */}
         {title && <h3 className="font-bold text-lg mb-4">{title}</h3>}
         {children}
       </div>
